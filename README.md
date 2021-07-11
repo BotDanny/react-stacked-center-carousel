@@ -6,6 +6,7 @@
 
 ## [Demo and Documentation](https://github.com/BotDanny)
 ![demo-1](https://user-images.githubusercontent.com/46267462/125190404-f604eb80-e20a-11eb-8bfe-4de76094e583.gif)
+![demo-3](https://user-images.githubusercontent.com/46267462/125190561-ca363580-e20b-11eb-9ecf-9ac17bb11466.gif)
 ![demo-2](https://user-images.githubusercontent.com/46267462/125190407-f7ceaf00-e20a-11eb-80a5-0304da2365ca.gif)
 
 
