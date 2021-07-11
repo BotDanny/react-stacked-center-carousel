@@ -1,0 +1,102 @@
+.twitch .twitch-button {
+  position: absolute;
+  top: 43%;
+  box-shadow: none;
+  border-radius: 5px;
+  width: 36px;
+  height: 36px;
+  background-color: transparent;
+}
+
+.twitch .twitch-button.right {
+  right: 0%;
+}
+.react-stacked-center-carousel {
+  padding: 20px 0;
+}
+
+.react-stacked-center-carousel-slide-0 .twitch-card {
+  cursor: default;
+}
+.twitch-card {
+  transition: all 450ms ease;
+  cursor: pointer;
+  width: 100%;
+  height: 300px;
+  position: relative;
+  background-color: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.twitch-card:hover {
+  transform: scale(1.05);
+}
+
+.react-stacked-center-carousel-slide-0 .twitch-card:hover {
+  transform: none;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
+}
+
+.twitch-card .card-overlay {
+  user-select: none;
+  position: absolute;
+  background-color: #00000099;
+  transition: all 450ms ease;
+}
+
+.twitch-card:hover .card-overlay {
+  background-color: #0000002d;
+}
+
+.react-stacked-center-carousel-slide-0 .card-overlay {
+  background-color: #00000099 !important;
+}
+
+.twitch-card .cover-image {
+  object-fit: cover;
+}
+
+.twitch-card .cover {
+  position: absolute;
+  transition: opacity 450ms ease;
+}
+.react-stacked-center-carousel-slide-0 .twitch-card .cover {
+  transition: opacity 450ms ease, z-index 0ms 450ms;
+}
+
+.twitch-card .cover.on {
+  opacity: 1;
+  z-index: 1;
+}
+
+.twitch-card .cover.off {
+  opacity: 0;
+  z-index: -1;
+}
+
+.twitch-card .detail {
+  display: flex;
+}
+.twitch-card .video {
+  width: 70%;
+}
+.twitch-card .discription {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.twitch-card .avatar {
+  background-color: #ff6161;
+}
+
+.twitch-card p {
+  cursor: auto;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 150%;
+}

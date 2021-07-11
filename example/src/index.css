@@ -1,0 +1,158 @@
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #1976d2;
+}
+
+.root-content .MuiTabs-flexContainer {
+  justify-content: space-evenly;
+}
+
+.root-content .MuiTab-root {
+  text-transform: none;
+}
+
+.root-content .no-optimization-list {
+  height: 800px;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.root-content .MuiCircularProgress-root {
+  color: #ffffff;
+}
+
+.why-page a {
+  color: #1976d2;
+}
+
+.root-content .MuiTypography-body1 {
+  line-height: 2;
+}
+
+.root-content main {
+  padding: 20px 30px 20px 275px;
+  display: flex;
+  flex-direction: column;
+  /* min-height: 100vh; */
+}
+main .half-section {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+main .code-wrapper {
+  padding: 20px;
+  background-color: #282c34;
+}
+
+main pre {
+  margin: 0;
+}
+
+main .required {
+  color: red;
+}
+
+main .MuiDivider-root.divider {
+  margin: 10px 40px;
+  background-color: rgb(0 0 0 / 25%);
+}
+
+.MuiDrawer-root .site-title {
+  padding: 10px 20px;
+}
+
+.MuiDrawer-root .first-level span {
+  font-weight: 600;
+}
+
+.MuiDrawer-root .second-level {
+  padding-left: 30px;
+}
+
+.MuiDrawer-root .MuiList-padding {
+  padding: 0;
+}
+
+.App {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.root-content p {
+  margin-bottom: 10px;
+}
+
+body .MuiTypography-body1 {
+  font-family: 'Nunito', sans-serif;
+}
+
+main .prop-section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border: rgba(0, 0, 0, 0.205) solid 1px;
+  border-bottom: none;
+}
+
+main .prop-section-main {
+  padding: 10px 15px;
+  display: flex;
+  background-color: #f5f5f5;
+  border-bottom: rgba(0, 0, 0, 0.205) solid 1px;
+}
+main .prop-section-secondary {
+  padding: 15px;
+  line-height: 1.5;
+}
+
+main .props-title {
+  font-weight: 600;
+  color: #1976d2;
+}
+
+main .props-type {
+  margin: 0 20px;
+}
+
+main .props-default {
+  color: rgb(92, 92, 92);
+  font-style: italic;
+  align-self: flex-end;
+  margin: 0 10px;
+}
+
+main .props-example {
+  display: block;
+  margin: 0;
+  margin-top: 5px;
+  color: #ff4343;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
