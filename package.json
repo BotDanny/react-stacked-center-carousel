@@ -1,6 +1,6 @@
 {
   "name": "react-stacked-center-carousel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A responsive, performant, well animated, swipeable, center mode carousel that stacks its slide",
   "author": "BotDanny",
   "license": "MIT",
@@ -8,6 +8,18 @@
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
+  "homepage": "https://botdanny.github.io/react-stacked-center-carousel",
+  "keywords": [
+    "carousel",
+    "stacked",
+    "stack",
+    "center",
+    "responsive",
+    "Image slider",
+    "swipe",
+    "touch",
+    "twitch"
+  ],
   "engines": {
     "node": ">=10"
   },
