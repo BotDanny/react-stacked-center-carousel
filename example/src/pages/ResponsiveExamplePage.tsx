@@ -24,7 +24,7 @@ const ResponsiveExamplePage = () => {
           slide displayed (1-5) based on viewport width.
         </Typography>
       </Box>
-      <ResponsiveCarousel useGrabCursor={false} fadeDistance={0} useButton={false}/>
+      <ResponsiveCarousel useGrabCursor={false} useButton={false}/>
       <p className='sectionTitle'>Code</p>
       <Divider />
       <Box p={0} pt={1} pb={1}>
