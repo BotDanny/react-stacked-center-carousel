@@ -18,11 +18,17 @@ import CustomScaleExamplePage from './pages/CustomScaleExample';
 import PaginationExamplePage from './pages/PaginationExample';
 import TwitchExample from './pages/Twitch';
 
-export default function SideNav() {
+export default function SideNav(props: any) {
+  const { openNav } = props;
   const { pathname } = useLocation();
   return (
     <div>
-      <Drawer variant='permanent' anchor='left'>
+      <Drawer
+        variant='permanent'
+        anchor='left'
+        className='doc-drawer'
+        classes={{ paper: openNav ? 'on' : '' }}
+      >
         <Typography
           variant='h6'
           className='site-title'

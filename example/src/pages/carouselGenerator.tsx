@@ -84,7 +84,7 @@ export default function ResponsiveCarousel(props: props) {
             <StackedCarousel
               ref={carouselRef}
               slideComponent={Card}
-              slideWidth={750}
+              slideWidth={width < 800? width - 40 : 750}
               carouselWidth={width}
               data={data}
               currentVisibleSlide={currentVisibleSlide}

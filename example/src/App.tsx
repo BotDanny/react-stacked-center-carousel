@@ -1,12 +1,14 @@
 import React from 'react';
 import SideNav, { examples, introductions, api, propExamples } from './sideNav';
 import { Switch, Route } from 'react-router-dom';
+import Fab from '@material-ui/core/Fab';
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 const App = () => {
   const pages = [examples, introductions, api, propExamples].flat();
-  console.log(pages)
+  const [openNav, setNav] = React.useState(false);
   return (
     <div className='root-content'>
-      <SideNav />
+      <SideNav openNav={openNav}/>
       <main>
         <Switch>
           {pages.map(({ route, component }) => {
@@ -19,6 +21,15 @@ const App = () => {
           })}
         </Switch>
       </main>
+      <Fab
+        color='primary'
+        aria-label='add'
+        onClick={() => setNav(!openNav)}
+        className="toggle-button"
+        size='small'
+      >
+        <MenuOpenIcon />
+      </Fab>
     </div>
   );
 };
