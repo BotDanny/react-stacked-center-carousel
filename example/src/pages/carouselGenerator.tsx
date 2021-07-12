@@ -84,7 +84,7 @@ export default function ResponsiveCarousel(props: props) {
             <StackedCarousel
               ref={carouselRef}
               slideComponent={Card}
-              slideWidth={width < 800? width - 40 : 750}
+              slideWidth={width < 800 ? width - 40 : 750}
               carouselWidth={width}
               data={data}
               currentVisibleSlide={currentVisibleSlide}
@@ -126,40 +126,31 @@ export default function ResponsiveCarousel(props: props) {
   );
 }
 
-export const Card = React.memo(
-  function (props: StackedCarouselSlideProps) {
-    const { data, dataIndex } = props;
-    const { cover } = data[dataIndex];
-    return (
-      <div
+export const Card = React.memo(function (props: StackedCarouselSlideProps) {
+  const { data, dataIndex } = props;
+  const { cover } = data[dataIndex];
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: 300,
+        userSelect: 'none'
+      }}
+      className='my-slide-component'
+    >
+      <img
         style={{
+          height: '100%',
           width: '100%',
-          height: 300,
-          userSelect: 'none'
+          objectFit: 'cover',
+          borderRadius: 0
         }}
-        className='my-slide-component'
-      >
-        <img
-          style={{
-            height: '100%',
-            width: '100%',
-            objectFit: 'cover',
-            borderRadius: 0
-          }}
-          draggable={false}
-          src={cover}
-        />
-      </div>
-    );
-  },
-  function (prev: StackedCarouselSlideProps, next: StackedCarouselSlideProps) {
-    return (
-      prev.slideIndex === next.slideIndex &&
-      prev.dataIndex === next.dataIndex &&
-      prev.data === next.data
-    );
-  }
-);
+        draggable={false}
+        src={cover}
+      />
+    </div>
+  );
+});
 
 export const CodeHighlight = React.memo(function (props: { code: string }) {
   return (
