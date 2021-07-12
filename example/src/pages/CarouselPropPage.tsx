@@ -229,7 +229,7 @@ const props = [
     defaultValue: 'evenly spread',
     example: '<StackedCarousel ... fadeDistance={0.5} />',
     explanation:
-      'The percentage of the amount of available that can be used for transition.',
+      'A number between 1 and 0 that indicate the percentage of the amount of available that can be used for transition.',
     customExplanation: <img style={{ width: 500 }} src={fadeDistanceDemo} />
   },
   {
