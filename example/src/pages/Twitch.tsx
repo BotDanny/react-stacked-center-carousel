@@ -21,7 +21,10 @@ const TwitchExample = () => {
   return (
     <div className='twitch'>
       <p className='sectionTitle' style={{ marginTop: 0 }}>
-        Reproducing the carousel on <a target="_blank" href="https://www.twitch.tv/">Twitch</a>
+        Reproducing the carousel on{' '}
+        <a target='_blank' href='https://www.twitch.tv/'>
+          Twitch
+        </a>
       </p>
       <Divider />
       <Box p={0} pt={1} pb={0} mb={2}>
@@ -72,14 +75,13 @@ const TwitchExample = () => {
       <p className='sectionTitle'>
         <a
           target='_blank'
-          href='https://github.com/BotDanny/react-stacked-center-carousel/blob/master/example/src/pages/Twitch.css'
+          href='https://github.com/BotDanny/react-stacked-center-carousel/blob/master/example/src/pages/CompleteTwitchExample.tsx'
         >
           JS Code
-        </a>
-        {" "}
+        </a>{' '}
         <a
           target='_blank'
-          href='https://github.com/BotDanny/react-stacked-center-carousel/blob/master/example/src/pages/CompleteTwitchExample.tsx'
+          href='https://github.com/BotDanny/react-stacked-center-carousel/blob/master/example/src/pages/Twitch.css'
         >
           CSS Code
         </a>
