@@ -22,6 +22,15 @@ or
 yarn add react-stacked-center-carousel
 ```
 
+## Maintenance
+
+I will be actively maintaining this package. 
+
+If you find any problem, you can open an issue, I will resolve it as soon as possible.
+
+If you have any suggestion, please also open an issue, it will be greatly appreciated! 
+
+
 ## License
 
 MIT © [BotDanny](https://github.com/BotDanny)
