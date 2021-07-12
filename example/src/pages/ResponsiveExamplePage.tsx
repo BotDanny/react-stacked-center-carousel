@@ -15,7 +15,7 @@ const ResponsiveExamplePage = () => {
           If you want to your carousel to be responsive, then you need to use
           the ResponsiveContainer component. If you also want to display
           different amount of slides at different width, then you need to use
-          the containerWidth argument provided in the render function to
+          the parentWidth argument provided in the render function to
           determine the amount of slide to display and pass that value as
           currentVisibleSlide prop to the carousel component.
         </Typography>
@@ -34,7 +34,7 @@ const ResponsiveExamplePage = () => {
   );
 };
 
-const code = `import { StackedCarousel, ResponsiveContainer, slideProp } from 'react-stacked-center-carousel';
+const code = `import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
 
 const data = [{cover: 'https://coverfiles.alphacoders.com/664/66426.jpg', title: 'Interstaller'} ...];
 
@@ -43,28 +43,29 @@ function ResponsiveCarousel() {
     return (
       <div style={{ width: '100%', position: 'relative' }}>
             // ResponsiveContainer will have the same width as its parent element
-            <ResponsiveContainer carouselRef={ref} render={(containerWidth, carouselRef) => {
-                        let currentVisibleSlide = 5;
-                        if (containerWidth <= 1280) currentVisibleSlide = 3;
-                        if (containerWidth <= 720) currentVisibleSlide = 1;
-                        return (
-                            <StackedCarousel
-                                    ref={carouselRef}
-                                    data={data}
-                                    carouselWidth={containerWidth}
-                                    slideWidth={500}
-                                    slideComponent={Card}
-                                    maxVisibleSlide={5}
-                                    currentVisibleSlide={currentVisibleSlide}
-                            />
-            )}}/>
+            <ResponsiveContainer carouselRef={ref} render={(parentWidth, carouselRef) => {
+              let currentVisibleSlide = 5;
+              if (parentWidth <= 1440) currentVisibleSlide = 3;
+              else if (parentWidth <= 1080) currentVisibleSlide = 1;
+              return (
+                  <StackedCarousel
+                          ref={carouselRef}
+                          data={data}
+                          carouselWidth={parentWidth}
+                          slideWidth={750}
+                          slideComponent={Slide}
+                          maxVisibleSlide={5}
+                          currentVisibleSlide={currentVisibleSlide}
+                          useGrabCursor={true}
+                  />
+              )}}/>
       </div>
     );
 }
 
 // Very important to memoize your component!!!
 const Card = React.memo(
-    function (props: slideProp) {
+    function (props: StackedCarouselSlideProps) {
         const { data, dataIndex } = props;
         const { cover } = data[dataIndex];
         return (
@@ -77,7 +78,7 @@ const Card = React.memo(
             </div>
         );
     },
-    function (prev: slideProp, next: slideProp) {
+    function (prev: StackedCarouselSlideProps, next: StackedCarouselSlideProps) {
       return prev.dataIndex === next.dataIndex;
     }
 );`;

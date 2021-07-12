@@ -2,8 +2,10 @@ import React from 'react';
 import {
   StackedCarousel,
   ResponsiveContainer,
-  slideProp
+  StackedCarouselSlideProps
 } from 'react-stacked-center-carousel';
+import { Box, Typography } from '@material-ui/core';
+import Highlight from 'react-highlight';
 import Fab from '@material-ui/core/Fab';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -82,7 +84,7 @@ export default function ResponsiveCarousel(props: props) {
             <StackedCarousel
               ref={carouselRef}
               slideComponent={Card}
-              slideWidth={width < 800? width - 40 : 750}
+              slideWidth={750}
               carouselWidth={width}
               data={data}
               currentVisibleSlide={currentVisibleSlide}
@@ -125,7 +127,7 @@ export default function ResponsiveCarousel(props: props) {
 }
 
 export const Card = React.memo(
-  function (props: slideProp) {
+  function (props: StackedCarouselSlideProps) {
     const { data, dataIndex } = props;
     const { cover } = data[dataIndex];
     return (
@@ -133,9 +135,9 @@ export const Card = React.memo(
         style={{
           width: '100%',
           height: 300,
-          userSelect: 'none',
+          userSelect: 'none'
         }}
-        className='card'
+        className='my-slide-component'
       >
         <img
           style={{
@@ -150,7 +152,7 @@ export const Card = React.memo(
       </div>
     );
   },
-  function (prev: slideProp, next: slideProp) {
+  function (prev: StackedCarouselSlideProps, next: StackedCarouselSlideProps) {
     return (
       prev.slideIndex === next.slideIndex &&
       prev.dataIndex === next.dataIndex &&
@@ -158,3 +160,11 @@ export const Card = React.memo(
     );
   }
 );
+
+export const CodeHighlight = React.memo(function (props: { code: string }) {
+  return (
+    <Box p={0} pt={1} pb={1}>
+      <Highlight className='typescript'>{props.code}</Highlight>
+    </Box>
+  );
+});

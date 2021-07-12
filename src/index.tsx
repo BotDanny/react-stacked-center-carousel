@@ -1,8 +1,10 @@
-import StackedCarousel, { props, slideProp } from './carousel';
-import ResponsiveContainer from './responsiveContainer';
+import StackedCarousel from './carousel';
+import { props, slideProp } from './interfaces'
+import ResponsiveContainer, {ResponsiveContainerProps} from './responsiveContainer';
 export {
   StackedCarousel,
   ResponsiveContainer,
-  props as ReactStackedCarouselProps,
-  slideProp
+  ResponsiveContainerProps,
+  props as StackedCarouselProps,
+  slideProp as StackedCarouselSlideProps
 };

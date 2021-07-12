@@ -1,79 +1,11 @@
 import React from 'react';
-export interface props {
-  data: any[];
-  carouselWidth: number;
-  slideWidth: number;
-  slideComponent: React.ComponentType<any>;
-  maxVisibleSlide: number;
-  currentVisibleSlide?: number;
-  customScales?: number[];
-  swipeThreshold?: number;
-  transitionTime?: number;
-  customTransition?: string;
-  fadeDistance?: number;
-  useGrabCursor?: boolean;
-  height?: number;
-  disableSwipe?: boolean;
-  onActiveSlideChange?: (activeSlide: number) => void;
-  className?: string;
-}
-
-export interface slideProp {
-  dataIndex: number;
-  data: any[];
-  slideIndex: number;
-  isCenterSlide: boolean;
-  swipeTo: (steps: number) => void;
-}
-
-interface renderedSlide {
-  position: number;
-  dataIndex: number;
-  scale: number;
-  slideIndex: number;
-  opacity: number;
-  key: number;
-  zIndex: number;
-}
-
-interface staticSlideInfo {
-  position: number;
-  scale: number;
-  opacity: number;
-  maxTransformDistance: {
-    left: number;
-    right: number;
-  };
-  maxTransformScale: {
-    left: number;
-    right: number;
-  };
-  maxTransformOpacity: {
-    left: number;
-    right: number;
-  };
-  slideIndex: number;
-}
-
-interface swipePositionInfo {
-  slideIndex: number;
-  maxLeft: number;
-  maxRight: number;
-}
-
-interface slideInfoMap {
-  [key: string]: staticSlideInfo;
-}
-
-interface state {
-  swipeStarted: boolean;
-  initalSwipeX: number;
-  renderedSlides: renderedSlide[];
-  prevRenderedSlides: renderedSlide[];
-  swipePositionInfo: swipePositionInfo[];
-  swipRight: boolean;
-  tempShift: boolean;
-}
+import {
+  props,
+  state,
+  slideInfoMap,
+  staticSlideInfo,
+  renderedSlide
+} from './interfaces';
 
 export default class StackedCarousel extends React.PureComponent<props, state> {
   static defaultScaleFactor: number = 0.85;
@@ -340,6 +272,10 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     this.updateHeight();
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.clearSlideTimeout)
+  }
+
   componentDidUpdate(prevProps: props) {
     if (!shouldRecaclculate(this.props, prevProps)) return;
     const {
@@ -405,11 +341,6 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   private clearUselessSlide = () => {
     this.addedSlide = 0;
     const { renderedSlides } = this.state;
-    const newRenderedSlides = this.getInRangeSlides(renderedSlides);
-    this.setState({ renderedSlides: newRenderedSlides });
-  };
-
-  private getInRangeSlides = (renderedSlides: renderedSlide[]) => {
     const newRenderedSlides = renderedSlides.filter(
       ({ slideIndex, dataIndex }) => {
         const absoluteSlideIndex = Math.abs(slideIndex);
@@ -419,7 +350,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
         return false;
       }
     );
-    return newRenderedSlides;
+    this.setState({ renderedSlides: newRenderedSlides });
   };
 
   private safeGetSlideInfo = (slideIndex: number) => {
@@ -516,10 +447,8 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   };
 
   private getSwipeX(e: any) {
-    // mouse event
     if (e.type[0] === 'm') return e.clientX;
     try {
-      // touch event
       return e.touches[0]?.clientX || e.changedTouches[0]?.clientX;
     } catch {
       throw Error('Something went wrong with getting mouse position');
@@ -670,16 +599,16 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       }
       return {
         ...slide,
+        position: targetPosition,
         scale,
         opacity,
-        zIndex,
-        position: targetPosition
+        zIndex
       };
     });
 
     this.setState({
-      tempShift,
-      renderedSlides: newRenderedSlides
+      renderedSlides: newRenderedSlides,
+      tempShift
     });
   };
 
@@ -691,16 +620,14 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       );
       return {
         ...slide,
+        zIndex: this.getZIndex(slide.slideIndex),
         opacity,
         scale,
-        position,
-        zIndex: this.getZIndex(slide.slideIndex)
+        position
       };
     });
     this.setState(() => {
-      return {
-        renderedSlides: newDefault
-      };
+      return { renderedSlides: newDefault };
     }, this.debouncedClearInvisibleSlide);
   };
 
@@ -733,24 +660,29 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   render() {
     const { swipeStarted, renderedSlides, swipRight, tempShift } = this.state;
     const {
+      slideComponent: Component,
+      transitionTime = StackedCarousel.defaultTransitionTime,
+      className,
       data,
       slideWidth,
       customTransition,
       carouselWidth,
       useGrabCursor,
-      height,
-      className,
-      slideComponent: Component,
-      transitionTime = StackedCarousel.defaultTransitionTime
+      height
     } = this.props;
 
-    const cursor = useGrabCursor
-      ? swipeStarted
-        ? 'grabbing'
-        : 'grab'
-      : 'default';
+    const cursor =
+      useGrabCursor && (swipeStarted ? 'grabbing' : 'grab') || 'default';
     return (
       <div
+        className={`react-stacked-center-carousel ${className || ''}`}
+        onMouseDown={this.onSwipeStart}
+        onMouseUp={this.onSwipeEnd}
+        onMouseMove={this.onSwipe}
+        onMouseLeave={this.onSwipeEnd}
+        onTouchStart={this.onSwipeStart}
+        onTouchMove={this.onSwipe}
+        onTouchEnd={this.onSwipeEnd}
         ref={this.listRef}
         style={{
           width: carouselWidth,
@@ -759,14 +691,6 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
           overflow: 'hidden',
           cursor
         }}
-        onMouseDown={this.onSwipeStart}
-        onMouseUp={this.onSwipeEnd}
-        onMouseMove={this.onSwipe}
-        onMouseLeave={this.onSwipeEnd}
-        onTouchStart={this.onSwipeStart}
-        onTouchMove={this.onSwipe}
-        onTouchEnd={this.onSwipeEnd}
-        className={`react-stacked-center-carousel ${className || ''}`}
       >
         {renderedSlides.map(
           ({
@@ -784,25 +708,25 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
             const transition = swipeStarted
               ? 'none'
               : customTransition ||
-                `all ${transitionTime}ms ease, z-index ${zDuration}ms ease, width 0ms, left 0ms`;
+                `all ${transitionTime}ms ease, z-index ${zDuration}ms ease`;
             const isCenterSlide = tempShift
               ? zIndex === this.maxZIndex
               : slideIndex === 0;
             return (
               <div
                 key={key}
+                className={`react-stacked-center-carousel-slide-${ID}`}
+                draggable={false}
                 style={{
-                  transition,
-                  opacity,
-                  zIndex,
                   position: 'absolute',
                   display: 'flex',
                   left: `calc(50% - ${slideWidth / 2}px)`,
                   transform: `translateX(${position}px) scale(${scale})`,
-                  width: slideWidth
+                  width: slideWidth,
+                  transition,
+                  opacity,
+                  zIndex
                 }}
-                className={`react-stacked-center-carousel-slide-${ID}`}
-                draggable={false}
               >
                 {dataIndex !== -1 && (
                   <Component

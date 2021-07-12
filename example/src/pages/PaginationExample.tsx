@@ -9,7 +9,7 @@ const PaginationExamplePage = () => {
   const onCenterSlideDataIndexChange = React.useCallback((newIndex: number) => {
     setCenterSlideDataIndex(newIndex);
   }, []);
-  console.log(centerSlideDataIndex);
+
   return (
     <div>
       <p className='sectionTitle' style={{ marginTop: 0 }}>
@@ -102,14 +102,14 @@ function ResponsiveCarousel() {
     // ResponsiveContainer will make the carousel to have the width of its parent
     return (
       <div style={{ width: '100%', position: 'relative' }}>
-            <ResponsiveContainer render={(containerWidth) => {
+            <ResponsiveContainer render={(parentWidth) => {
                         let currentVisibleSlide = 5;
-                        if (containerWidth <= 1280) currentVisibleSlide = 3;
-                        if (containerWidth <= 720) currentVisibleSlide = 1;
+                        if (parentWidth <= 1280) currentVisibleSlide = 3;
+                        if (parentWidth <= 720) currentVisibleSlide = 1;
                         return (
                             <StackedCarousel
                                     data={data}
-                                    carouselWidth={containerWidth}
+                                    carouselWidth={parentWidth}
                                     slideWidth={500}
                                     slideComponent={Card}
                                     maxVisibleSlide={5}

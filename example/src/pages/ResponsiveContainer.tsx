@@ -14,7 +14,7 @@ const ResponsiveContainerProps = () => {
       <div className='prop-section-container'>
         <div className='prop-section-main'>
           <span className='props-title'>render*</span>
-          <span className='props-type'>{`( containerWidth: number, carouselRef?: React.RefObject<StackedCarousel> ) => StackedCarousel`}</span>
+          <span className='props-type'>{`( parentWidth: number, carouselRef?: React.RefObject<StackedCarousel> ) => StackedCarousel`}</span>
         </div>
         <div className='prop-section-secondary'>
           <Typography className='props-explanation'>
@@ -22,7 +22,7 @@ const ResponsiveContainerProps = () => {
             will receive two arguments:
           </Typography>
           <Typography className='props-explanation'>
-            The first argument is a number argument called containerWidth which
+            The first argument is a number argument called parentWidth which
             represents the width of ResponsiveContainer's parent element.
           </Typography>
           <Typography className='props-explanation'>
@@ -53,7 +53,7 @@ const ResponsiveContainerProps = () => {
             instead of directly on the carousel is because ResponsiveContainer
             will not call the render function before it figures out its parent's
             width. Its parent's width can be determined only after its parent
-            mount. Thus, on the first mount containerWidth is undefined, and the
+            mount. Thus, on the first mount parentWidth is undefined, and the
             render function will not be called. If you set the ref directly on
             the carousel then it will not work since nothing is rendered yet.
           </Typography>
@@ -69,21 +69,21 @@ const ResponsiveContainerProps = () => {
 const example = `function ResponsiveCarousel() {
     // If you want to use a ref to call the method of StackedCarousel, you cannot set the ref directly on the carousel component
     // This is because ResponsiveContainer will not render the carousel before its parent's width is determined
-    // containerWidth is determined after your parent component mounts. Thus if you set the ref directly it will not work since the carousel is not rendered
+    // parentWidth is determined after your parent component mounts. Thus if you set the ref directly it will not work since the carousel is not rendered
     // Thus you need to pass your ref object to the ResponsiveContainer as the carouselRef prop and in your render function you will receive this ref object
     const ref = React.useRef<ResponsiveContainer>();
     return (
       <div style={{ width: '100%', position: 'relative' }}>
-            <ResponsiveContainer carouselRef={ref} render={(containerWidth, carouselRef) => {
+            <ResponsiveContainer carouselRef={ref} render={(parentWidth, carouselRef) => {
                         let currentVisibleSlide = 5;
-                        if (containerWidth <= 1280) currentVisibleSlide = 3;
-                        if (containerWidth <= 720) currentVisibleSlide = 1;
+                        if (parentWidth <= 1280) currentVisibleSlide = 3;
+                        if (parentWidth <= 720) currentVisibleSlide = 1;
                         return (
                             <StackedCarousel
                                   ref={carouselRef}
                                   slideComponent={Card}
                                   slideWidth={500}
-                                  carouselWidth={containerWidth}
+                                  carouselWidth={parentWidth}
                                   data={data}
                                   maxVisibleSlide={5}
                                   currentVisibleSlide={currentVisibleSlide}

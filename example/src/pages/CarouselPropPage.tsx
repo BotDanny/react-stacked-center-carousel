@@ -1,28 +1,34 @@
 import React from 'react';
-import { StackedCarousel, ResponsiveContainer } from 'react-stacked-center-carousel';
-import Fab from '@material-ui/core/Fab';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import {
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Switch,
-  Box,
-  Typography
-} from '@material-ui/core';
-import ResponsiveCarousel from './carouselGenerator';
+import { Divider, Typography, Box } from '@material-ui/core';
+import { CodeHighlight } from './carouselGenerator';
+import DOMSnapShot from './DOM.png';
 import Highlight from 'react-highlight';
+import fadeDistanceDemo from './fadeDistance.png';
 
 const PropsPage = () => {
   return (
     <div>
       <Highlight className='javascript'>
-        {"import { StackedCarousel, slideProp } from 'react-stacked-center-carousel';"}
+        {
+          "import { StackedCarousel, StackedCarouselSlideProps } from 'react-stacked-center-carousel';"
+        }
       </Highlight>
+      <p className='sectionTitle'>DOM structure</p>
+      <Box p={0} mb={2}>
+        <Typography variant='body1'>
+          react-stacked-center-carousel will render 2 invisible slides in
+          addition to the visible slides, one at each end. This is for the fade
+          in/out transition.
+        </Typography>
+        <Typography variant='body1'>
+          Your slide component will be wrapper inside a div that has class name
+          "react-stacked-center-carousel-slide-X" where X is the number of slide
+          away from center. For example X=0 means it is the center slide. X=1
+          means it is the first slide to the right of the center slide. This can
+          be useful to add css.
+        </Typography>
+        <img src={DOMSnapShot} style={{ width: '100%' }} />
+      </Box>
       <p className='sectionTitle'>Props (methods are at the bottom)</p>
       <Divider style={{ marginBottom: 30 }} />
       {props.map((prop, index) => {
@@ -35,12 +41,16 @@ const PropsPage = () => {
           customExplanation
         } = prop;
         return (
-          <div className='prop-section-container' key={name} style={{
-            borderBottom:
-              index === props.length - 1
-                ? 'rgba(0, 0, 0, 0.205) solid 1px'
-                : 'none'
-          }}>
+          <div
+            className='prop-section-container'
+            key={name}
+            style={{
+              borderBottom:
+                index === props.length - 1
+                  ? 'rgba(0, 0, 0, 0.205) solid 1px'
+                  : 'none'
+            }}
+          >
             <div className='prop-section-main'>
               <span className='props-title'>{name}</span>
               <span className='props-type'>{type}</span>
@@ -49,11 +59,12 @@ const PropsPage = () => {
               )}
             </div>
             <div className='prop-section-secondary'>
-              {customExplanation || (
-                <span className='props-explanation'>{explanation}</span>
-              )}
+              <span className='props-explanation'>{explanation}</span>
+              {customExplanation}
               {example && (
-                <span className='props-example'>Example: {example}</span>
+                <span className='props-example'>
+                  <CodeHighlight code={example} />
+                </span>
               )}
             </div>
           </div>
@@ -106,9 +117,14 @@ const slideProps = [
       'Index of the current slide. 0 represents the center slide, 1 represents the slide that is at the right side of the center slide, and 1 slide away. -1 represents the slide that is at the left side of the center slide, and 1 slide away. And so on. For example, if you have 5 slides to display, then slideIndex will be -2 -1 0 1 2 respectively.'
   },
   {
-    name: 'swipeStarted',
+    name: 'isCenterSlide',
     explanation:
-      'A boolean indicating if the user is swiping (dragging) the carousel. This is useful if you want to use some custom cursor when the user is not swiping and use the grab cursor when user is swiping.'
+      'Indicate if the current slide is the center slide. You should use this over slideIndex === 0.'
+  },
+  {
+    name: 'swipeTo: (steps: number) => void',
+    explanation:
+      'A function to move the carousel {steps} step. For example swipeTo(2) will shift the center 2 slides to the right and swipeTo(-3) will shift the center 3 slides to the left'
   }
 ];
 
@@ -117,30 +133,33 @@ const props = [
     name: 'data*',
     type: 'any[]',
     example:
-      '[{ url: "xxx1", title: "image1" }, { url: "xxx2", title: "image2" }]',
+      'const data = [{ url: "xxx1", title: "image1" }, { url: "xxx2", title: "image2" }]',
     explanation: 'A list of data that will be passed into each slide as a prop.'
   },
   {
     name: 'carouselWidth*',
     type: 'number',
-    example: '1000',
+    example: `<ResponsiveContainer render={parentWidth => <StackedCarousel ... carouselWidth={parentWidth}/>`,
     explanation: `The width of the carousel. 
-      If you are using the responsive container that react-stacked-center-carousel provides, then you can set it to the container width from the containerWidth parameter passed into the render function.`
+      If you are using the responsive container that react-stacked-center-carousel provides, then you can set it to the container width from the parentWidth parameter passed into the render function.`
   },
   {
     name: 'slideWidth*',
     type: 'number',
-    example: '600',
-    explanation: 'The width of each slide. Note that your slide component will be wrapped inside a div that has the width of slideWidth.'
+    example: '<StackedCarousel ... slideWidth={750}/>',
+    explanation:
+      'The width of each slide. Note that your slide component will be wrapped inside a div that has the width of slideWidth.'
   },
   {
     name: 'slideComponent*',
     type: 'React.ComponentType',
+    example:
+      'const { data, dataIndex, slideIndex, isCenterSlide, swipeTo } = props;',
     customExplanation: (
       <>
         <span className='props-explanation'>
-          Your component to render each slide. it will receive the following 4
-          props:
+          Your component to render each slide. Shoud be <b>memoized!</b> It will
+          receive the following 5 props:
         </span>
         <ul>
           {slideProps.map((content, index) => {
@@ -163,21 +182,35 @@ const props = [
   {
     name: 'maxVisibleSlide*',
     type: 'number',
-    example: '5',
+    example: '<StackedCarousel ... maxVisibleSlide={5} />',
     explanation:
-      'Maximum amount of slides to display, must be an odd number. If you want to have different number of slides to display based on the container width then you need to provide the currentVisibleSlide prop.'
+      'Maximum amount of visible slides to display, must be an odd number. If you want to have different number of slides to display based on the container width then you need to provide the currentVisibleSlide prop.'
   },
   {
     name: 'currentVisibleSlide',
     type: 'number',
     defaultValue: 'maxVisibleSlide',
-    example: '3',
+    example:
+      '<StackedCarousel ... maxVisibleSlide={5} currentVisibleSlide={3} />',
     explanation:
-      'Current number of slides to display, defaults to maxVisibleSlide. Must be smaller than maxVisibleSlide and must be an odd number. This is useful if you have break points (for example you want to display 7 slides if viewport width is between 1280px and 1920px, 5 slides for 1280px - 720px, and 3 slides for 720px - 0px).'
+      'Current number of visible slides to display, defaults to maxVisibleSlide. Must be smaller or equal to maxVisibleSlide and must be an odd number. This is useful if you have break points (for example you want to display 7 slides if viewport width is between 1280px and 1920px, 5 slides for 1280px - 720px, and 3 slides for 720px - 0px).'
+  },
+  {
+    name: 'className',
+    type: 'string',
+    explanation: 'class name applied to the carousel container that contains the slides'
+  },
+  {
+    name: 'disableSwipe',
+    type: 'boolean',
+    default: 'false',
+    explanation: 'disable drag/swipe'
   },
   {
     name: 'onActiveSlideChange',
     type: '(activeSlide: number) => void',
+    example:
+      '<StackedCarousel ... onActiveSlideChange={ newCenterDataIndex => setCenter(newCenterDataIndex) } />',
     explanation:
       'A call back function that will be called on first mount and when the center slide changes. It will receive on parameter which is the data index of the new center slide. This is useful for pagination.'
   },
@@ -185,23 +218,24 @@ const props = [
     name: 'customScales',
     type: 'number[]',
     defaultValue: '[1, 0.85, 0.7225, 0.614125, ...]',
-    example: '[1, 0.8, 0.5] if 5 slides are displayed',
+    example: `<StackedCarousel ... customScales={[1, 0.85, 0.7, 0.55]} maxVisibleSlide={5} />
+// Note the last element in customScales is the scale applied to the invisible slide used for fade in/out transition`,
     explanation:
-      'An array of numbers indicating the scale applied to the slide. Index 0 of this array represents the scale applied to the center slide (which is usually 1), index 1 of this array represents the scale applied to the slide that are 1 slide away from the center, so on. Example [1, 0.8, 0.5] if 5 slides are displayed. The default scale applied to each slide is 0.85 ^ how many slide away from center.'
+      'An array of numbers indicating the scale applied to the slide. Index 0 of this array represents the scale applied to the center slide (must be 1), index 1 of this array represents the scale applied to the slide that are 1 slide away from the center (slideIndex 1 and -1), so on. It must have the length of (maxVisibleSlide + 1) / 2 where the last element is the scale applied to the invisible slide at the end used for the fade transition'
   },
   {
     name: 'fadeDistance',
     type: 'number',
-    defaultValue: '0',
-    exmaple: '100',
+    defaultValue: 'evenly spread',
+    example: '<StackedCarousel ... fadeDistance={0.5} />',
     explanation:
-      'The horizontal distance (in pixel) provided for the first and last slide to fade in or out.'
+      'The percentage of the amount of available that can be used for transition.',
+    customExplanation: <img style={{ width: 500 }} src={fadeDistanceDemo} />
   },
   {
     name: 'swipeThreshold',
     type: 'number',
     defaultValue: '50',
-    exmaple: '100',
     explanation:
       'How many pixel need to be swiped in order to triger the snapping effect (move forward or backward 1 slide).'
   },
@@ -209,31 +243,20 @@ const props = [
     name: 'transitionTime',
     type: 'number',
     defaultValue: '450',
-    exmaple: '300',
     explanation: 'Transition time (in ms) applied to all transition.'
   },
   {
     name: 'customTransition',
     type: 'string',
     defaultValue: 'all 450ms ease 0s',
-    exmaple: `\"all 450ms ease 0s, z-index 200ms\"`,
-    explanation:
-      'Custom transition applied to all slide, useful for modifying z-index transition time.'
+    explanation: 'Custom css transition applied to all slide.'
   },
   {
     name: 'useGrabCursor',
     type: 'boolean',
     defaultValue: 'false',
     explanation:
-      'Whether or not to use the grab and grabbing cursor when swiping. Note if you set a cursor on your slide component then it will override this cursor. If you want to keep the grabbing cursor when swiping while having a custom cursor when not swiping, consider using the swipeStarted prop provided to you slide component.'
-  },
-  {
-    name: 'useCoolDown',
-    type: 'boolean | number',
-    defaultValue: 'false',
-    exmaple: '200',
-    explanation:
-      'Minimum amount of time needed to wait between each swipe, only affects swipe by button. If set to true then the time period will be the 450 if transitionTime is not set or else the same as transitionTime. If a number is provided then the period will be set to that value.'
+      'Whether or not to use the grab and grabbing cursor when swiping.'
   },
   {
     name: 'height',
@@ -246,10 +269,15 @@ const props = [
 const methods = [
   {
     name: 'goNext()',
-    explanation: 'Move to the next slide'
+    explanation: 'Move to the next slide. Equivalent to swipeTo(1).'
   },
   {
     name: 'goBack()',
-    explanation: 'Move to the previous slide.'
+    explanation: 'Move to the previous slide. Equivalent to swipeTo(-1).'
+  },
+  {
+    name: 'swipeTo( steps: number )',
+    explanation:
+      'Move {steps} slide away from the center. For example swipeTo(-3) will shift the center 3 slides to the left'
   }
 ];
