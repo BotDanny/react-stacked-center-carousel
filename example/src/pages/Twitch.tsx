@@ -152,7 +152,7 @@ export const Slide = React.memo(function (props: StackedCarouselSlideProps) {
 
 const code = `import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
 
-const data = [{cover: 'https://coverfiles.alphacoders.com/664/66426.jpg', title: 'Interstaller'} ...];
+const data = new Array(10).fill({ coverImage: "xxx", video: "xxx" })
 
 function ResponsiveCarousel() {
     const ref = React.useRef<ResponsiveContainer>();
