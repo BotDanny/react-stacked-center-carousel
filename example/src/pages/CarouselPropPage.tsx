@@ -198,13 +198,13 @@ const props = [
   {
     name: 'className',
     type: 'string',
-    explanation: 'class name applied to the carousel container that contains the slides'
+    explanation: 'class name applied to the carousel container that contains the slides.'
   },
   {
     name: 'disableSwipe',
     type: 'boolean',
     default: 'false',
-    explanation: 'disable drag/swipe'
+    explanation: 'disable drag/swipe.'
   },
   {
     name: 'onActiveSlideChange',
@@ -221,7 +221,7 @@ const props = [
     example: `<StackedCarousel ... customScales={[1, 0.85, 0.7, 0.55]} maxVisibleSlide={5} />
 // Note the last element in customScales is the scale applied to the invisible slide used for fade in/out transition`,
     explanation:
-      'An array of numbers indicating the scale applied to the slide. Index 0 of this array represents the scale applied to the center slide (must be 1), index 1 of this array represents the scale applied to the slide that are 1 slide away from the center (slideIndex 1 and -1), so on. It must have the length of (maxVisibleSlide + 1) / 2 where the last element is the scale applied to the invisible slide at the end used for the fade transition'
+      'An array of numbers indicating the scale applied to the slide. Index 0 of this array represents the scale applied to the center slide (must be 1), index 1 of this array represents the scale applied to the slide that are 1 slide away from the center (slideIndex 1 and -1), so on. It must have the length of (maxVisibleSlide + 1) / 2 where the last element is the scale applied to the invisible slide at the end used for the fade transition.'
   },
   {
     name: 'fadeDistance',
@@ -278,6 +278,6 @@ const methods = [
   {
     name: 'swipeTo( steps: number )',
     explanation:
-      'Move {steps} slide away from the center. For example swipeTo(-3) will shift the center 3 slides to the left'
+      'Move {steps} slide away from the center. For example swipeTo(-3) will shift the center 3 slides to the left.'
   }
 ];
