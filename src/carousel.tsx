@@ -23,8 +23,18 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   private renderedSlidePerSide: number;
 
   private validateProps = () => {
-    const { currentVisibleSlide, maxVisibleSlide, fadeDistance, customScales } =
-      this.props;
+    const {
+      currentVisibleSlide,
+      maxVisibleSlide,
+      fadeDistance,
+      customScales,
+      data
+    } = this.props;
+    if (data.length < (maxVisibleSlide + 1) / 2) {
+      throw Error(
+        'you must have more than (maxVisibleSlide + 1) / 2 data item'
+      );
+    }
     if (
       (currentVisibleSlide && currentVisibleSlide % 2 !== 1) ||
       maxVisibleSlide % 2 !== 1
@@ -99,7 +109,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
           slideIndex: slideIndex,
           opacity: opacity,
           zIndex: renderedSlidePerSide - Math.abs(slideIndex),
-          key: constructor ? dataIndex : newRenderedSlides[relativeIndex].key
+          key: constructor ? slideIndex : newRenderedSlides[relativeIndex].key
         };
 
         slideInfoMap[slideIndex] = {
@@ -273,7 +283,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.clearSlideTimeout)
+    clearTimeout(this.clearSlideTimeout);
   }
 
   componentDidUpdate(prevProps: props) {
@@ -317,13 +327,8 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   };
 
   private modDataRange = (n: number) => {
-    const {
-      data,
-      currentVisibleSlide: currentVisibleDisplaySlide,
-      maxVisibleSlide
-    } = this.props;
-    const currentVisibleSlide = currentVisibleDisplaySlide || maxVisibleSlide;
-    const m = Math.max(data.length, currentVisibleSlide + 2);
+    const { data } = this.props;
+    const m = data.length;
     return ((n % m) + m) % m;
   };
 
@@ -672,7 +677,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     } = this.props;
 
     const cursor =
-      useGrabCursor && (swipeStarted ? 'grabbing' : 'grab') || 'default';
+      (useGrabCursor && (swipeStarted ? 'grabbing' : 'grab')) || 'default';
     return (
       <div
         className={`react-stacked-center-carousel ${className || ''}`}
