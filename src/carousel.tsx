@@ -299,7 +299,6 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     this.slideInfoMap = slideInfoMap;
     this.sortedSlideInfo = sortedSlideInfo;
     this.slidePerSide = slidePerSide;
-    // this.height = this.props.height || 0;
     this.centerPosition = centerPosition;
 
     this.setState(() => {
@@ -307,7 +306,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
         initalSwipeX: 0,
         renderedSlides: newRenderedSlides,
         prevRenderedSlides: [...newRenderedSlides],
-        swipRight: true
+        swipRight: false
       };
     }, this.updateHeight);
   }
@@ -632,7 +631,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       };
     });
     this.setState(() => {
-      return { renderedSlides: newDefault };
+      return { renderedSlides: newDefault, swipRight: false };
     }, this.debouncedClearInvisibleSlide);
   };
 
@@ -708,8 +707,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
             zIndex
           }) => {
             const ID = dataIndex === -1 ? `hidden-${key}` : slideIndex;
-            const zDuration =
-              transitionTime * (swipRight && slideIndex <= 0 ? 0.5 : 1);
+            const zDuration = transitionTime * (swipRight ? 0.5 : 1);
             const transition = swipeStarted
               ? 'none'
               : customTransition ||
