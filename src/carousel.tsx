@@ -367,7 +367,10 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     return this.slideInfoMap[positionIndex];
   };
 
-  private moveCarousel = (steps: number) => {
+  private moveCarousel = (
+    steps: number,
+    disableSwipeRightState: boolean = false 
+  ) => {
     const { renderedSlides } = this.state;
     const { onActiveSlideChange } = this.props;
     let newCenterDataIndex = 0;
@@ -439,7 +442,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
         return {
           swipeStarted: false,
           renderedSlides: newSlides,
-          swipRight: steps < 0 ? true : false
+          swipRight: disableSwipeRightState? false : steps < 0 ? true : false
         };
       },
       () => {
@@ -645,7 +648,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     let swipeLeft = swipeDistance > 0;
 
     const swipeThreshold = this.props.swipeThreshold || 50;
-    this.moveCarousel(delta <= swipeThreshold ? 0 : swipeLeft ? 1 : -1);
+    this.moveCarousel(delta <= swipeThreshold ? 0 : swipeLeft ? 1 : -1, true);
     this.setState({ tempShift: false });
   };
 
@@ -707,7 +710,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
             zIndex
           }) => {
             const ID = dataIndex === -1 ? `hidden-${key}` : slideIndex;
-            const zDuration = transitionTime * (swipRight ? 0.5 : 1);
+            const zDuration = transitionTime * (swipRight ? 0.6 : 1);
             const transition = swipeStarted
               ? 'none'
               : customTransition ||
