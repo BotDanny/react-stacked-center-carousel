@@ -369,8 +369,9 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
 
   private moveCarousel = (
     steps: number,
-    disableSwipeRightState: boolean = false 
+    disableSwipeRightState: boolean = false
   ) => {
+  
     const { renderedSlides } = this.state;
     const { onActiveSlideChange } = this.props;
     let newCenterDataIndex = 0;
@@ -378,9 +379,10 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     const newSlides = renderedSlides.map((oldSlide) => {
       const { slideIndex, dataIndex } = oldSlide;
       if (dataIndex === -1) return oldSlide;
+      if (slideIndex === 0)
+        newCenterDataIndex = this.modDataRange(dataIndex + steps);
 
       const newSlideIndex = slideIndex + -steps;
-      if (newSlideIndex === 0) newCenterDataIndex = dataIndex;
 
       const slideInfo = this.safeGetSlideInfo(newSlideIndex);
       return {
@@ -442,7 +444,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
         return {
           swipeStarted: false,
           renderedSlides: newSlides,
-          swipRight: disableSwipeRightState? false : steps < 0 ? true : false
+          swipRight: disableSwipeRightState ? false : steps < 0 ? true : false
         };
       },
       () => {
