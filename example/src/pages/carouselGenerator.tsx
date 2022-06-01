@@ -12,11 +12,11 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 export const data = [
   {
-    cover: 'https://coverfiles.alphacoders.com/664/66426.jpg',
+    cover: 'https://images6.alphacoders.com/679/thumb-1920-679459.jpg',
     title: 'Interstaller'
   },
   {
-    cover: '	https://images2.alphacoders.com/851/thumb-1920-85182.jpg',
+    cover: 'https://images2.alphacoders.com/851/thumb-1920-85182.jpg',
     title: 'Inception'
   },
   {
@@ -105,7 +105,7 @@ export default function ResponsiveCarousel(props: props) {
             size='small'
             color='primary'
             onClick={() => {
-              ref.current?.goBack();
+              ref.current?.swipeTo(6);
             }}
           >
             <ArrowBackIcon />
@@ -115,7 +115,7 @@ export default function ResponsiveCarousel(props: props) {
             size='small'
             color='primary'
             onClick={() => {
-              ref.current?.goNext();
+              ref.current?.swipeTo(-6);
             }}
           >
             <ArrowForwardIcon />
