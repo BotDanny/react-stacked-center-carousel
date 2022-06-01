@@ -105,7 +105,7 @@ export default function ResponsiveCarousel(props: props) {
             size='small'
             color='primary'
             onClick={() => {
-              ref.current?.swipeTo(6);
+              ref.current?.goBack();
             }}
           >
             <ArrowBackIcon />
@@ -115,7 +115,7 @@ export default function ResponsiveCarousel(props: props) {
             size='small'
             color='primary'
             onClick={() => {
-              ref.current?.swipeTo(-6);
+              ref.current?.goNext();
             }}
           >
             <ArrowForwardIcon />
