@@ -150,6 +150,8 @@ export const Card = React.memo(function (props: StackedCarouselSlideProps) {
       />
     </div>
   );
+}, function (prev: StackedCarouselSlideProps, next: StackedCarouselSlideProps) {
+  return prev.dataIndex === next.dataIndex;
 });
 
 export const CodeHighlight = React.memo(function (props: { code: string }) {
