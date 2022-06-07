@@ -371,7 +371,6 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     steps: number,
     disableSwipeRightState: boolean = false
   ) => {
-  
     const { renderedSlides } = this.state;
     const { onActiveSlideChange } = this.props;
     let newCenterDataIndex = 0;
@@ -761,7 +760,7 @@ function shouldRecaclculate(prop1: props, prop2: props) {
     prop1.maxVisibleSlide !== prop2.maxVisibleSlide ||
     prop1.currentVisibleSlide !== prop2.currentVisibleSlide ||
     prop1.fadeDistance !== prop2.fadeDistance ||
-    prop1.customScales !== prop2.customScales
+    prop1.customScales?.join('') !== prop2.customScales?.join('')
   )
     return true;
   return false;
