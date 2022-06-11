@@ -367,6 +367,24 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     return this.slideInfoMap[positionIndex];
   };
 
+  private getInsertionInfo = (steps: number) => {
+    const newAddedSlideIndex =
+      steps > 0
+        ? this.slidePerSide - steps + 1
+        : -this.slidePerSide - steps - 1;
+    const targetSlideIndex = steps > 0 ? this.slidePerSide : -this.slidePerSide;
+    const requireMoreSlide = (current: number, target: number) => {
+      return steps > 0 ? current <= target : current >= target;
+    };
+    const updateCount = steps > 0 ? 1 : -1;
+    return {
+      newAddedSlideIndex,
+      targetSlideIndex,
+      requireMoreSlide,
+      updateCount
+    };
+  };
+
   private moveCarousel = (
     steps: number,
     disableSwipeRightState: boolean = false
@@ -397,41 +415,44 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     if (steps !== 0) {
       const maxSlideIndex = steps > 0 ? this.slidePerSide : -this.slidePerSide;
       this.addedSlide += Math.abs(steps);
-      for (
-        let newSlideIndex =
-          steps > 0
-            ? this.slidePerSide - steps + 1
-            : -this.slidePerSide - steps - 1;
-        Math.abs(newSlideIndex) <= this.slidePerSide;
-        newSlideIndex += steps > 0 ? 1 : -1
-      ) {
-        if (!newSlides.find(({ slideIndex }) => slideIndex === newSlideIndex)) {
-          const insertPosition = newSlides.findIndex(({ slideIndex }) => {
-            return slideIndex === newSlideIndex + (steps > 0 ? -1 : 1);
-          });
 
-          const { scale, position } = this.slideInfoMap[maxSlideIndex];
-          const insertDataIndex = this.modDataRange(
-            newCenterDataIndex + newSlideIndex
-          );
-          this.keyCount += 1;
-          const zIndex = this.getZIndex(newSlideIndex);
-          const insertSlide = {
-            scale,
-            position,
-            opacity: 0,
-            zIndex: zIndex - this.addedSlide,
-            slideIndex: newSlideIndex,
-            dataIndex: insertDataIndex,
-            key: this.keyCount
-          };
+      const insertionInfo = this.getInsertionInfo(steps);
+      let { newAddedSlideIndex } = insertionInfo;
+      const { requireMoreSlide, updateCount, targetSlideIndex } = insertionInfo;
 
-          newSlides.splice(
-            steps > 0 ? insertPosition + 1 : insertPosition,
-            0,
-            insertSlide
-          );
-        }
+      while (requireMoreSlide(newAddedSlideIndex, targetSlideIndex)) {
+        const insertPosition = newSlides.findIndex(
+          ({ slideIndex, dataIndex }) => {
+            return (
+              slideIndex === newAddedSlideIndex - updateCount &&
+              dataIndex !== -1
+            );
+          }
+        );
+
+        const { scale, position } = this.slideInfoMap[maxSlideIndex];
+        const insertDataIndex = this.modDataRange(
+          newSlides[insertPosition].dataIndex + updateCount
+        );
+        this.keyCount += 1;
+        const zIndex = this.getZIndex(newAddedSlideIndex);
+        const insertSlide = {
+          scale,
+          position,
+          opacity: 0,
+          zIndex: zIndex - this.addedSlide,
+          slideIndex: newAddedSlideIndex,
+          dataIndex: insertDataIndex,
+          key: this.keyCount
+        };
+
+        newSlides.splice(
+          steps > 0 ? insertPosition + 1 : insertPosition,
+          0,
+          insertSlide
+        );
+
+        newAddedSlideIndex += updateCount;
       }
     }
 

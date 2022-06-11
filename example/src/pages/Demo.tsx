@@ -172,7 +172,7 @@ export default function ResponsiveCarousel(props) {
 
 // Very import to memoize your Slide component otherwise there might be performance issue
 // At minimum your should do a simple React.memo(SlideComponent)
-// If you want the absolute best performance then pass in a custom comparator function like below 
+// If you want the absolute best performance then pass in a custom comparator function
 export const Card = React.memo(function (props) {
   const { data, dataIndex } = props;
   const { cover } = data[dataIndex];
@@ -197,7 +197,5 @@ export const Card = React.memo(function (props) {
       />
     </div>
   );
-}, function (prev: StackedCarouselSlideProps, next: StackedCarouselSlideProps) {
-  return prev.dataIndex === next.dataIndex;
 });
 `;
