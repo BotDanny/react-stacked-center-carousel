@@ -197,7 +197,5 @@ export const Card = React.memo(function (props) {
       />
     </div>
   );
-}, function (prev: StackedCarouselSlideProps, next: StackedCarouselSlideProps) {
-  return prev.dataIndex === next.dataIndex;
 });
 `;
