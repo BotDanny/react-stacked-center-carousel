@@ -421,37 +421,41 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       const { requireMoreSlide, updateCount, targetSlideIndex } = insertionInfo;
 
       while (requireMoreSlide(newAddedSlideIndex, targetSlideIndex)) {
-        const insertPosition = newSlides.findIndex(
-          ({ slideIndex, dataIndex }) => {
-            return (
-              slideIndex === newAddedSlideIndex - updateCount &&
-              dataIndex !== -1
-            );
-          }
+        const slideAlreadyExist = newSlides.find(
+          ({ slideIndex }) => slideIndex === newAddedSlideIndex
         );
+        if (!slideAlreadyExist) {
+          const insertPosition = newSlides.findIndex(
+            ({ slideIndex, dataIndex }) => {
+              return (
+                slideIndex === newAddedSlideIndex - updateCount &&
+                dataIndex !== -1
+              );
+            }
+          );
 
-        const { scale, position } = this.slideInfoMap[maxSlideIndex];
-        const insertDataIndex = this.modDataRange(
-          newSlides[insertPosition].dataIndex + updateCount
-        );
-        this.keyCount += 1;
-        const zIndex = this.getZIndex(newAddedSlideIndex);
-        const insertSlide = {
-          scale,
-          position,
-          opacity: 0,
-          zIndex: zIndex - this.addedSlide,
-          slideIndex: newAddedSlideIndex,
-          dataIndex: insertDataIndex,
-          key: this.keyCount
-        };
+          const { scale, position } = this.slideInfoMap[maxSlideIndex];
+          const insertDataIndex = this.modDataRange(
+            newSlides[insertPosition].dataIndex + updateCount
+          );
+          this.keyCount += 1;
+          const zIndex = this.getZIndex(newAddedSlideIndex);
+          const insertSlide = {
+            scale,
+            position,
+            opacity: 0,
+            zIndex: zIndex - this.addedSlide,
+            slideIndex: newAddedSlideIndex,
+            dataIndex: insertDataIndex,
+            key: this.keyCount
+          };
 
-        newSlides.splice(
-          steps > 0 ? insertPosition + 1 : insertPosition,
-          0,
-          insertSlide
-        );
-
+          newSlides.splice(
+            steps > 0 ? insertPosition + 1 : insertPosition,
+            0,
+            insertSlide
+          );
+        }
         newAddedSlideIndex += updateCount;
       }
     }
