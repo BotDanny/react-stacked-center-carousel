@@ -294,7 +294,9 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       newRenderedSlides,
       sortedSlideInfo,
       centerPosition
-    } = this.initializeProperties();
+    } = this.initializeProperties(
+      this.props.maxVisibleSlide !== prevProps.maxVisibleSlide
+    );
 
     this.slideInfoMap = slideInfoMap;
     this.sortedSlideInfo = sortedSlideInfo;
