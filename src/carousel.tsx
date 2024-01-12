@@ -24,6 +24,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
 
   private validateProps = () => {
     const {
+      swipeSpeed,
       currentVisibleSlide,
       maxVisibleSlide,
       fadeDistance,
@@ -53,6 +54,9 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     }
     if (customScales && customScales.length !== (maxVisibleSlide + 3) / 2) {
       throw Error('customScales must have lengh (maxVisibleSlide + 3) / 2');
+    }
+    if (swipeSpeed && (swipeSpeed > 0.99 || swipeSpeed < 0.01)) {
+      throw Error('swipeSpeed must have a value between 0.01 and 0.99');
     }
   };
 
@@ -586,6 +590,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
         zIndex: this.getZIndex(newSlideIndex)
       });
     }
+
     if (onActiveSlideChange && shiftDirection !== 0) {
       onActiveSlideChange(centerDataIndex);
     }
@@ -614,7 +619,8 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
 
     const transformFactor = (10 / slideWidth) * delta;
     // 0.8^10 = 0.1, when the user swipes the length of a slide then all slides will slide 90% to the left
-    const transformPercentage = 1 - Math.pow(0.8, transformFactor);
+    const transformPercentage =
+      1 - Math.pow(1 - (this.props.swipeSpeed || 0.5), transformFactor);
 
     const newRenderedSlides = prevRenderedSlides.map((slide, index) => {
       const { position, slideIndex, dataIndex } = slide;
@@ -666,17 +672,16 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     }, this.debouncedClearInvisibleSlide);
   };
 
-  private onSwipeEnd = (e: React.MouseEvent | React.TouchEvent) => {
+  private onSwipeEnd = () => {
     const { swipeStarted } = this.state;
     if (!swipeStarted) return;
-    const { initalSwipeX } = this.state;
-    const currentSwipeX = this.getSwipeX(e);
-    const swipeDistance = initalSwipeX - currentSwipeX;
-    const delta = Math.abs(swipeDistance);
-    let swipeLeft = swipeDistance > 0;
+    const { renderedSlides } = this.state;
 
-    const swipeThreshold = this.props.swipeThreshold || 50;
-    this.moveCarousel(delta <= swipeThreshold ? 0 : swipeLeft ? 1 : -1, true);
+    const newCenterSlide = renderedSlides.find(
+      ({ zIndex }) => zIndex === this.maxZIndex
+    );
+
+    this.moveCarousel(newCenterSlide?.slideIndex || 0);
     this.setState({ tempShift: false });
   };
 

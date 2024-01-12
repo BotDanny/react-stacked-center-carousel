@@ -32,9 +32,9 @@ export interface props {
    */
   customScales?: number[];
   /**
-   * How many pixel need to be swiped in order to triger the snapping effect.
+   * A number between 0.01 to 0.99 that determines how fast the swipping is. 0.99 for the fastest swipe.
    */
-  swipeThreshold?: number;
+  swipeSpeed?: number;
   /**
    * Transition time (in ms) applied to all transition.
    */
