@@ -233,11 +233,11 @@ const props = [
     customExplanation: <img style={{ width: 500 }} src={fadeDistanceDemo} />
   },
   {
-    name: 'swipeThreshold',
+    name: 'swipeSpeed',
     type: 'number',
-    defaultValue: '50',
+    defaultValue: '0.5',
     explanation:
-      'How many pixel need to be swiped in order to triger the snapping effect (move forward or backward 1 slide).'
+      'A number between 0.01 to 0.99 that determines how fast the swipping is. 0.99 for the fastest swipe.'
   },
   {
     name: 'transitionTime',
