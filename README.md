@@ -22,6 +22,10 @@ or
 yarn add react-stacked-center-carousel
 ```
 
+## Change log
+
+- 1.0.14: The prop `swipeThreshold` has been deprecated. A new prop [`swipeSpeed`](https://botdanny.github.io/react-stacked-center-carousel/#/StackedCarousel) has been provided. 
+
 ## Maintenance
 
 I will be actively maintaining this package. 
