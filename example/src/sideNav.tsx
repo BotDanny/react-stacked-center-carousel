@@ -15,6 +15,7 @@ import CommonQuestionPage from './pages/CommonQuestionPage';
 import ResponsiveExamplePage from './pages/ResponsiveExamplePage';
 import fadeDistanceExamplePage from './pages/FadeDistanceExample';
 import CustomScaleExamplePage from './pages/CustomScaleExample';
+import CustomSwipeSpeedExamplePage from './pages/SwipeSpeedExample';
 import PaginationExamplePage from './pages/PaginationExample';
 import TwitchExample from './pages/Twitch';
 
@@ -123,5 +124,10 @@ export const propExamples = [
     label: 'customScales',
     route: '/customScales',
     component: CustomScaleExamplePage
+  },
+  {
+    label: 'swipeSpeed',
+    route: '/swipeSpeed',
+    component: CustomSwipeSpeedExamplePage
   }
 ];

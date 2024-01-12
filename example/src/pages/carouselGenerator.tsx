@@ -60,6 +60,7 @@ interface props {
   useButton?: boolean;
   customScales?: number[];
   onActiveSlideChange?: (activeSlide: number) => void;
+  swipeSpeed?: number;
 }
 
 export default function ResponsiveCarousel(props: props) {
@@ -69,6 +70,7 @@ export default function ResponsiveCarousel(props: props) {
     useGrabCursor = true,
     useButton = true,
     customScales,
+    swipeSpeed,
     onActiveSlideChange
   } = props;
   const ref = React.useRef<StackedCarousel>();
@@ -94,6 +96,7 @@ export default function ResponsiveCarousel(props: props) {
               {...(customScales ? { customScales } : {})}
               {...(fadeDistance !== undefined ? { fadeDistance } : {})}
               {...(onActiveSlideChange ? { onActiveSlideChange } : {})}
+              {...(swipeSpeed ? { swipeSpeed } : {})}
             />
           );
         }}
