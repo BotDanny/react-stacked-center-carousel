@@ -6,6 +6,7 @@ import {
   staticSlideInfo,
   renderedSlide
 } from './interfaces';
+import { IPromisedSub } from './promiseddata';
 
 export default class StackedCarousel extends React.PureComponent<props, state> {
   static defaultScaleFactor: number = 0.85;
@@ -21,7 +22,8 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   private centerPosition: number;
   private maxZIndex: number;
   private renderedSlidePerSide: number;
-
+  private subscription?: IPromisedSub;
+  
   private validateProps = () => {
     const {
       swipeSpeed,
@@ -29,9 +31,11 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       maxVisibleSlide,
       fadeDistance,
       customScales,
-      data
+      data,
+      promisedData
     } = this.props;
-    if (data.length < (maxVisibleSlide + 1) / 2) {
+
+    if ((promisedData ? promisedData.value : data).length < (maxVisibleSlide + 1) / 2) {
       throw Error(
         'you must have more than (maxVisibleSlide + 1) / 2 data item'
       );
@@ -61,6 +65,10 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   };
 
   private initializeProperties = (constructor: boolean = false) => {
+    // recalculate everything as if newly constructed
+    if (this.state?.dataUpdated)
+      constructor = true;
+
     this.validateProps();
     const {
       carouselWidth,
@@ -82,7 +90,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       : this.state.renderedSlides.filter(({ slideIndex, dataIndex }) => {
           return dataIndex === -1 || Math.abs(slideIndex) <= this.slidePerSide;
         });
-    const slideInfoMap = {};
+    const slideInfoMap: any = {};
 
     const newCenterSlideRelativeIndex = constructor
       ? (totalRenderCount - 1) / 2
@@ -245,6 +253,11 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
 
   constructor(props: props) {
     super(props);
+    // mutually exclusive objects
+    if (props.promisedData && props.data) {
+      console.warn('`dataPromise` defined. `data` property will be ignored.');
+    }
+
     const {
       renderedSlides,
       slideInfoMap,
@@ -261,7 +274,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
     this.height = this.props.height || 0;
     this.listRef = React.createRef();
     this.clearSlideTimeout = null;
-    this.keyCount = props.data.length;
+    this.keyCount = (props.promisedData ? props.promisedData.value : props.data).length;
     this.addedSlide = 0;
     this.centerPosition = centerPosition;
     this.maxZIndex = 100;
@@ -283,11 +296,15 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   }
 
   componentDidMount() {
+    this.subscription = this.props.promisedData?.subscribe(_ => {
+      this.setState({...this.state, dataUpdated: true});
+    });
     this.updateHeight();
   }
 
   componentWillUnmount() {
     clearTimeout(this.clearSlideTimeout);
+    this.subscription?.unsubscribe();
   }
 
   componentDidUpdate(prevProps: props) {
@@ -332,8 +349,8 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
   };
 
   private modDataRange = (n: number) => {
-    const { data } = this.props;
-    const m = data.length;
+    const { data, promisedData } = this.props;
+    const m = (promisedData ? promisedData.value : data).length;
     return ((n % m) + m) % m;
   };
 
@@ -704,6 +721,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
       transitionTime = StackedCarousel.defaultTransitionTime,
       className,
       data,
+      promisedData,
       slideWidth,
       customTransition,
       carouselWidth,
@@ -713,6 +731,8 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
 
     const cursor =
       (useGrabCursor && (swipeStarted ? 'grabbing' : 'grab')) || 'default';
+
+    let data2Use = promisedData ? promisedData.value : data;
     return (
       <div
         className={`react-stacked-center-carousel ${className || ''}`}
@@ -770,7 +790,7 @@ export default class StackedCarousel extends React.PureComponent<props, state> {
                 {dataIndex !== -1 && (
                   <Component
                     dataIndex={dataIndex}
-                    data={data}
+                    data={data2Use}
                     slideIndex={slideIndex}
                     isCenterSlide={isCenterSlide}
                     swipeTo={this.swipeTo}

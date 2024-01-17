@@ -1,8 +1,14 @@
+import { IPromisedData, IPromisedSub } from "./promiseddata";
+
 export interface props {
   /**
    * An array of data items used to populate your slides.
    */
-  data: any[];
+  data?: any[];
+  /**
+   * An promise 
+   */
+  promisedData?: IPromisedData;
   /**
    * The width of the carousel in px.
    */
@@ -120,4 +126,5 @@ export interface state {
   swipePositionInfo: swipePositionInfo[];
   swipRight: boolean;
   tempShift: boolean;
+  dataUpdated?: boolean;
 }

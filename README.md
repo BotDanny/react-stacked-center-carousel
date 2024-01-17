@@ -34,6 +34,57 @@ If you find any problem, you can open an issue, I will resolve it as soon as pos
 
 If you have any suggestion, please also open an issue, it will be greatly appreciated! 
 
+## Subscribable Data
+Issues arise when trying to use dynamic *maxVisibleSlides* property with dynamics items 
+(see details)[https://github.com/BotDanny/react-stacked-center-carousel/issues/22]
+To work around this use subscribable data object 
+```
+import React, { useEffect } from "react";
+import { PromisedData, ResponsiveContainer, StackedCarousel } from "react-stacked-center-carousel/src";
+
+// component for individual slides
+const CarouselItem = React.memo(function (props: any) {
+  const item = props.data[props.dataIndex];
+  return (
+    <span>{item}</span>
+  );
+});
+
+// new data from Promise, RxJs Observable, fetch api, w/e
+const fetchedItems = new Promise<any[]>((resolve, reject) => {
+  setTimeout(() => resolve(['one', 'two', 'three']), 1000);
+});
+
+// PromisedData object with initial items; RxJs BehaviorSubject can also be used
+const promisedItems = new PromisedData(['one', 'two']);
+
+export default function CarouselExample () {
+  const ref = React.useRef();
+
+  useEffect(() => {
+    fetchedItems.then(newItems => promisedItems.next(newItems))
+  }, []);
+
+  return (
+    <ResponsiveContainer
+        carouselRef={ref}
+        render={(parentWidth, carouselRef) => {
+          return (
+            <StackedCarousel
+              ref={carouselRef}
+              slideComponent={CarouselItem}
+              slideWidth={parentWidth < 800 ? parentWidth - 40 : 750}
+              carouselWidth={parentWidth}
+              promisedData={promisedItems}
+              maxVisibleSlide={promisedItems.value.length >= 3 ? 3 : 1}
+              useGrabCursor
+            />
+          );
+        }}
+    />
+  );
+}
+```
 
 ## License
 
